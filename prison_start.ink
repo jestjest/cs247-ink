@@ -2,7 +2,43 @@
 
 // Prison start knot.
 === prison_start ===
-# location Shawshank Penitentiary
-Hi world!
+After many hours on the road, you arrive at the Shawshank Penitentiary. A gray, musty fog envelopes you as you step off the bus. You are greeted by Head Warden Norton. # Passive
+-*  [Continue.]
+Warden Norton: This is Mr. Hadley, captain of the guards. I am Mr. Norton, the warden. You are sinners and scum, that's why they have sent you to me.
+Rule number one: no blaspheming. I'll not have the Lord's name taken in vain in my prison.
+-* [Continue.]
+Rule number two: at this prison, try to survive and keep your health in check. We don't want you dying in here and causing us trouble. # show-health
+-* [Continue.]
+Rule number three: don't be sneaking around. We know how suspicious everyone is. # show-suspicion
+-* [Continue.]
+The other rules you'll figure out as you go along. Any other questions?
+-> prison_start_rules
 
--> END
+= prison_start_rules
+*  What do we eat? # Player
+    Captain Hadley slowly marches up to you. # Passive
+    Captain Hadley: YOU EAT WHEN WE SAY YOU EAT! YOU
+PISS WHEN WE SAY YOU PISS! YOU SHIT WHEN WE SAY YOU SHIT! YOU SLEEP WHEN WE SAY YOU SLEEP! YOU MAGGOT-DICK MOTHERFUCKER!
+    ** [Meekly acknowledge.]
+    -> prison_start_rules
+*   When do we sleep? # Player
+    Captain Hadley: When we turn off the lights and tell you so. Don't you dare do anything after the dark.
+    ** [Acknowledge.]
+    -> prison_start_rules
+*   No sir. # Player
+
+- Warden Norton: I believe in two things. Discipline and the Bible. Here, you'll receive both.
+(holds up a Bible) # Passive
+Put your faith in the Lord. Your ass belongs to me. Welcome to Shawshank.
+* [Begin to leave the room.] # Passive
+Warden Norton: So... I believe you are here because you killed your wife.
+    **   I never did that! # Player
+        Warden Norton: Ha... Innocent? Like everyone else here, huh.
+        -> prison_end
+    **   So what? # Player
+    **   It's none of your business. # Player
+    -- Warden Norton: Watch what you say here. I can let you stay here for longer or shorter... depends on how pleased I am with you. Got it?
+        ~ suspicion = suspicion + 10
+-*  [Acknowledge]
+
+-> prison_end
