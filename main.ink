@@ -38,7 +38,7 @@ How will you spend it?
 Night {day}.
 -> night_choices
 = night_choices
-    How will you spend your {remaining_night_hours} hours?  # GET-number_input
+    How will you spend your {remaining_night_hours} hours?  # GET-int-number_input
 +   [Interact with the cell.]
     Not implemented yet.
     -> night_choices
@@ -48,11 +48,14 @@ Night {day}.
     -> night_choices
 +   { can_dig && remaining_night_hours > 0 } [Dig]
     {
-    - number_input >= remaining_night_hours:
-        Not implemented yet.
+    - remaining_night_hours >= number_input && health > 2 * remaining_night_hours:
+        Digging for {number_input}...
         ~ remaining_night_hours = remaining_night_hours - number_input
-    - else:
-        You can't dig for {number_input} hours.
+        ~ health = health - 2 * remaining_night_hours
+    - remaining_night_hours < number_input:
+        You don't have enough hours remaining in the night.
+    - health <= 2 * remaining_night_hours:
+        You don't have enough health for that.
     }
     -> night_choices
 +   [Sleep] Ending the night...
