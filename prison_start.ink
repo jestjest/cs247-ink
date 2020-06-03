@@ -2,15 +2,23 @@
 
 // Prison start knot.
 === prison_start ===
-After many hours on the road, you arrive at the Shawshank Penitentiary. A gray, musty fog envelopes you as you step off the bus. You are greeted by Head Warden Norton. # Passive
+After many hours on the road, you arrive at the Shawshank Penitentiary. A gray, musty fog envelopes you as you step off the bus.
+"I got 5 cigs on that Fat Ass crying first night!" # Passive
+"Throw me in for 10, that's an easy picking!" # Passive
+You are greeted by Head Warden Norton.
 -*  [Continue.]
 Warden Norton: This is Mr. Hadley, captain of the guards. I am Mr. Norton, the warden. You are sinners and scum, that's why they have sent you to me.
 Rule number one: no blaspheming. I'll not have the Lord's name taken in vain in my prison.
--* [Continue.]
-Rule number two: at this prison, try to survive and keep your health in check. We don't want you dying in here and causing us trouble. # show-health
--* [Continue.]
-Rule number three: don't be sneaking around. We know how suspicious everyone is. # show-suspicion
--* [Continue.]
+-*  [Continue.]
+Rule number two: at this prison, try to survive and keep your health in check. We don't want you dying in here and causing us trouble.
+~ health = 100
+-*  [Continue.]
+Rule number three: don't be sneaking around. We know how suspicious everyone is.
+~ suspicion = 0
+-*  [Continue.]
+Rule number four: behave yourself and you might get put on parole. Who knows. 
+~ goal = "Get granted parole."
+-*  [Continue.]
 The other rules you'll figure out as you go along. Any other questions?
 -> prison_start_rules
 
@@ -29,16 +37,24 @@ PISS WHEN WE SAY YOU PISS! YOU SHIT WHEN WE SAY YOU SHIT! YOU SLEEP WHEN WE SAY 
 
 - Warden Norton: I believe in two things. Discipline and the Bible. Here, you'll receive both.
 (holds up a Bible) # Passive
-Put your faith in the Lord. Your ass belongs to me. Welcome to Shawshank.
+Put your faith in the Lord. Your ass belongs to me.
+Welcome to Shawshank.
 * [Begin to leave the room.] # Passive
 Warden Norton: So... I believe you are here because you killed your wife.
     **   I never did that! # Player
-        Warden Norton: Ha... Innocent? Like everyone else here, huh.
-        -> prison_end
+        Warden Norton: Ha... Innocent? Like everyone else here, huh
+        -> prison_start_ending.
     **   So what? # Player
     **   It's none of your business. # Player
     -- Warden Norton: Watch what you say here. I can let you stay here for longer or shorter... depends on how pleased I am with you. Got it?
         ~ suspicion = suspicion + 10
--*  [Acknowledge]
-
--> prison_end
+        -> prison_start_ending
+= prison_start_ending
+-*  [Acknowledge.]
+The sun dims on the first day and everyone is corralled into their cells.
+You hear someone weeping a few cells down.
+Fat Ass: I wasn't meant to be here! I didn't do anything!... # Passive
+Others: Anddd that's a wrap, cough up those cigs, boys! # Passive
+It's going to be a long night.
+-*  [Sleep.]
+--> prison_end
