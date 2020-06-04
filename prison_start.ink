@@ -47,8 +47,9 @@ Warden Norton: So... I believe you are here because you killed your wife.
     **   So what? # Player
     **   It's none of your business. # Player
     -- Warden Norton: Watch what you say here. I can let you stay here for longer or shorter... depends on how pleased I am with you. Got it?
-        ~ suspicion = suspicion + 10
-        -> prison_start_ending
+    Suspicion increases. # Passive
+    ~ suspicion = suspicion + 10
+    -> prison_start_ending
 = prison_start_ending
 -*  [Acknowledge.]
 The sun dims on the first day and everyone is corralled into their cells.

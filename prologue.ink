@@ -9,6 +9,7 @@ You are on the witness stand, hands folded, suit and tie pressed, hair meticulou
 
 // Prologue court event.
 = prologue_court
+~ dig_percent = 100
 Defense attorney (D.A.): describe the confrontation you had with your wife the night she was murdered.
 *   It was ugly. # Player
     D.A.: How so?
