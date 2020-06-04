@@ -16,14 +16,14 @@
     **  [Tell him] 
         -> player_explain_hammer
     ->red_1_end
-*   [Tell him]  Fair enough. A rock-hammer is about eight or nine inches long. Looks like a miniature pickaxe, with a small sharp pick on one end, and a blunt hammerhead on the other. It's for rocks. #Player
+*   [Tell him]   #Player
     -> player_explain_hammer
 
 = player_explain_hammer
 Fair enough. A rock-hammer is about eight or nine inches long. Looks like a miniature pickaxe, with a small sharp pick on one end, and a blunt hammerhead on the other. It's for rocks. #Player
 I'm a rock hound. At least I was, in my old life. I'd like to be again, on a limited scale. #Player
 
-*  {like_by_Red > 10}[Red likes you.]Red: That comes free. But you understand my concern, right?  
+*  {like_by_Red >= 10}[Red likes you.]Red: That comes free. But you understand my concern, right?  
     **  [Explain]  If there's trouble, I doubt a rock-hammer will do me any good. #Player
         Red: Then I guess you wanna escape. Tunnel under the wall maybe?
         *** [(laugh politely)] #Player
@@ -33,7 +33,7 @@ I'm a rock hound. At least I was, in my old life. I'd like to be again, on a lim
                 ->red_1_end
     ->red_1_end
     
-*  {like_by_Red <= 10}[Red doesn't like you.]Red: I don't want to get any trouble. Or maybe plant your toy in somebody's skull?
+*  {like_by_Red < 10}[Red doesn't like you.]Red: I don't want to get any trouble. Or maybe plant your toy in somebody's skull?
     **  [You get nothing]
         ->red_1_end
 
