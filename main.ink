@@ -8,6 +8,20 @@ VAR goal = ""
 VAR remaining_night_hours = 8
 VAR number_input = 0
 VAR can_dig = false
+VAR like_by_Red = 0
+VAR get_hammer = 0
+VAR get_poster = 0
+
+//red stories
+-> red_0_start
+=== red_0_end ===
+
+-> red_1_start
+=== red_1_end ===
+
+->red_2_start
+=== red_2_end ===
+
 
 -> prison_start
 # -> prologue
