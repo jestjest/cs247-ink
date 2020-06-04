@@ -12,8 +12,8 @@
 - tools ? rock_hammer:
     You show Red your rock hammer. # Passive
     Red: you have a hammer. You said you are a rock hound. Can you make some chess pieces?
-    +   [Accept] Deal. # Player
-        You lose 5 health value making chess.
+    +   [Accept.] Deal. # Player
+        You lose some health making chess pieces for Red.
         ~ health -= 5
         -> poster_deal_done
     ++  [Refuse] I don't think Rita Hayworth is worth it. # Player
@@ -31,9 +31,8 @@
         -> poster_deal_done
 }
 = poster_deal_done
-+   You get the poster.
-    ~ has_poster = true
++   [You obtained a poster.]
+    ~ tools += poster
     -> red_2_end
-    
 = red_2_end
 -> day_phase.day_choices

@@ -1,6 +1,8 @@
 // TODO
 // Add suspicion score and check poster when digging.
-// Use dig progress and tools.
+// Use dig percent and tools.
+// Implement guards, environment interaction, other stories.
+// Add bounds for health, suspicion, dig percent.
 
 INCLUDE prologue.ink
 INCLUDE prison_start.ink
@@ -21,9 +23,8 @@ VAR dig_percent = 0
 
 VAR met_red = false
 VAR red_influence = 0
-VAR has_poster = 0
 
-LIST tools = rock_hammer, hammer
+LIST tools = rock_hammer, hammer, poster
 
 -> prologue
 === prologue_end ===
@@ -40,13 +41,13 @@ LIST tools = rock_hammer, hammer
 Day {day}.
 How will you spend it?
 +   [Interact with environment.]
-    Not implemented yet.
+    Not implemented yet. # Passive
     -> day_choices
 +   [Talk to someone.] Choose someone to talk to.
     ++  [Red]
         -> red_quests
     ++   [Guards]
-        Not implemented yet. 
+        Not implemented yet. # Passive
         -> day_choices
 +   [Call it a night.] Time to go to bed. # Player
     -> night_phase
@@ -55,46 +56,54 @@ How will you spend it?
     
 === night_phase ===
 ~ remaining_night_hours = 8
-Night {day}.
 -> night_choices
 = night_choices
-    How will you spend your {remaining_night_hours} hours?  # GET-int-number_input
+Night {day}.
+How will you spend your {remaining_night_hours} hours?  # GET-int-number_input
 +   [Interact with the cell.]
-    You notice a crack in the wall.
+    You notice a crack in the wall. # Passive
     {
-    - tools ? rock_hammer:
-        Eh? Looks like you're able to open up the crack with some of your tools.
+    - tools ? rock_hammer && goal == "Get granted parole.":
+        Eh? Looks like you're able to open up the crack with some of your tools. # Passive
         ~ can_dig = true
-        ~ goal = "Break out of prison"
+        ~ goal = "Break out of prison."
+        + [Found your true goal.]
+        -> night_choices
+    - tools !? rock_hammer:
+        But you don't mind it... for now. # Passive
+        + [Continue.]
+        -> night_choices
     - else:
-        But you don't mind it... for now.
+        Some day... you'll survive long enough to carve out your escape. Until then... # Passive
+        + [Continue.]
+        -> night_choices
     }
-    -> night_choices
 +   { remaining_night_hours > 0 } [Talk to your cell buddy (1 hour)]
-    Not implemented yet.
+    Not implemented yet. # Passive
     ~ remaining_night_hours = remaining_night_hours - 1
     -> night_choices
-+   { can_dig && remaining_night_hours > 0} [Dig]
++   { can_dig && remaining_night_hours > 0} [Dig (enter \# of hours)]
     {
-    - remaining_night_hours >= number_input && health > 2 * remaining_night_hours:
-        Digging for {number_input}...
-        ~ remaining_night_hours = remaining_night_hours - number_input
-        ~ health = health - 2 * remaining_night_hours
+    - remaining_night_hours >= number_input && health > 5 * remaining_night_hours:
+        Digging for {number_input} hours... you used up some health.
+        ~ remaining_night_hours -= number_input
+        ~ health -= 5 * number_input
     - remaining_night_hours < number_input:
         You don't have enough hours remaining in the night.
-    - health <= 2 * remaining_night_hours:
+    - health <= 5 * remaining_night_hours:
         You don't have enough health for that.
     }
     -> night_choices
 +   [Sleep] Ending the night...
-    ~ health = health + 2 * remaining_night_hours
+    ~ health = health + remaining_night_hours
     -> day_phase
 
 === red_quests ===
 You approach Red standing in the courtyard. # Passive
 {
 - started_daily_quest:
-    What do you want? Scram.
+    Red: You've bothered me enough today. Scram!
+    + [Walk away.]
     -> day_phase.day_choices
 - !met_red:
     + [Meet Red.]
@@ -104,10 +113,14 @@ You approach Red standing in the courtyard. # Passive
     + [Try to acquire a rock hammer.]
     ~ started_daily_quest = true
     -> red_1_start
-- goal == "Break out of prison":
+- tools ?! poster && goal == "Break out of prison.":
     + [Obtain a Rita Hayworth poster.]
     ~ started_daily_quest = true
     -> red_2_start
+- else:
+    Want a cig? Nothing better to do nowadays.
+    + [Walk away.]
+    -> day_phase.day_choices
 }
 
 === END ===
