@@ -14,7 +14,7 @@
     Red: you have a hammer. You said you are a rock hound. Can you make some chess pieces?
     +   [Accept.] Deal. # Player
         You lose some health making chess pieces for Red.
-        ~ health -= 5
+        ~ health = max(0, health - 5)
         -> poster_deal_done
     ++  [Refuse] I don't think Rita Hayworth is worth it. # Player
         Red: Fine. There is nothing to talk about then.
@@ -27,12 +27,12 @@
         -> red_2_end
     +  [Accept] Deal. # Player
         ++ You lose 30 health value doing laundry.
-        ~ health -= 30
+        ~ health = max(0, health - 30)
         -> poster_deal_done
 }
 = poster_deal_done
 +   [You obtained a poster.]
-    ~ tools += poster
+    ~ has_poster = true
     -> red_2_end
 = red_2_end
 -> day_phase.day_choices

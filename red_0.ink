@@ -25,7 +25,7 @@ Red: The wife-killin' banker. Why'd you do it?
 +   [Pleasure to hear that from you.]
 -+  [Relationship increases. Mental health increase a little.]
     ~ red_influence += 10
-    ~ health += 5
+    ~ health = min(100, health + 5)
     ~ met_red = true
 -> red_0_end
 

@@ -1,38 +1,46 @@
 // TODO
-// Add suspicion score and check poster when digging.
-// Use dig percent and tools.
-// Implement guards, environment interaction, other stories.
-// Add bounds for health, suspicion, dig percent.
+// Add suspicion score to digging.
+// Implement guards, environment interaction, other stories and tools.
 
 INCLUDE prologue.ink
 INCLUDE prison_start.ink
 INCLUDE red_0.ink
 INCLUDE red_1.ink
 INCLUDE red_2.ink
+INCLUDE utils.ink
 
 VAR day = 0
 VAR started_daily_quest = false
+VAR number_input = 0
 
 VAR goal = ""
+// Bounds: [0, 100]
 VAR health = 100
+// Bounds: [0, infty]
 VAR suspicion = 0
-VAR remaining_night_hours = 8
-VAR number_input = 0
-VAR can_dig = false
+
+// Bounds: [0, 100]
 VAR dig_percent = 0
+VAR remaining_night_hours = 8
+VAR can_dig = false
 
-VAR met_red = false
+// Bounds: [-infty, infty]
 VAR red_influence = 0
+VAR met_red = false
 
-LIST tools = rock_hammer, hammer, poster
+VAR has_poster = false
+// List of possible tools the player can have. The value is the dig multiplier.
+LIST tools = rock_hammer=1
 
--> prologue
+
+-> prison_start
 === prologue_end ===
 
 -> prison_start
 === prison_end ===
 
 -> day_phase
+// Day phase where the player makes a few choices.
 === day_phase ===
 ~ day = day + 1
 ~ started_daily_quest = false
@@ -52,8 +60,7 @@ How will you spend it?
 +   [Call it a night.] Time to go to bed. # Player
     -> night_phase
 
-    
-    
+// Night phase where the player makes a few choices.
 === night_phase ===
 ~ remaining_night_hours = 8
 -> night_choices
@@ -66,6 +73,7 @@ How will you spend your {remaining_night_hours} hours?  # GET-int-number_input
     - tools ? rock_hammer && goal == "Get granted parole.":
         Eh? Looks like you're able to open up the crack with some of your tools. # Passive
         ~ can_dig = true
+        ~ dig_percent = 0
         ~ goal = "Break out of prison."
         + [Found your true goal.]
         -> night_choices
@@ -84,20 +92,51 @@ How will you spend your {remaining_night_hours} hours?  # GET-int-number_input
     -> night_choices
 +   { can_dig && remaining_night_hours > 0} [Dig (enter \# of hours)]
     {
-    - remaining_night_hours >= number_input && health > 5 * remaining_night_hours:
-        Digging for {number_input} hours... you used up some health.
-        ~ remaining_night_hours -= number_input
-        ~ health -= 5 * number_input
+    - !has_poster:
+        You won't be able to dig until you get something to cover up the hole you'll make. # Passive
+        You spend an hour thinking, pacing back and forth. # Passive
+        ~ remaining_night_hours -= 1
+        -> night_choices
     - remaining_night_hours < number_input:
-        You don't have enough hours remaining in the night.
+        You don't have enough hours remaining in the night. # Passive
+        -> night_choices
     - health <= 5 * remaining_night_hours:
-        You don't have enough health for that.
+        You don't have enough health for that. # Passive
+        -> night_choices
     }
-    -> night_choices
-+   [Sleep] Ending the night...
-    ~ health = health + remaining_night_hours
+
+    ~ temp caught_percent = min(100, number_input * POW(suspicion, 0.4))
+    { caught_percent > 0: You hear the sound of thick leather shoes and batons clanging near by.} # Passive
+    You will be caught by the guards with {caught_percent}% chance. Continue?
+    ++ [Yes.]
+        ~ temp caught = RANDOM(1, 100) <= caught_percent
+        {
+        - caught:
+            OH NO! The guards arrived before you could fully cover up your escape route. # Passive
+            They subject you to the most unimaginable pain and torture a prisoner could ever experience.
+            ~ health = 0
+        - else:
+            Dug for {number_input} hours with a {LIST_MAX(tools)}. # Passive
+            You used up some health. # Passive
+            ~ remaining_night_hours -= number_input
+            ~ health -= 5 * number_input
+            ~ temp dig_multiplier = LIST_VALUE(LIST_MAX(tools))
+            ~ dig_percent = min(100, dig_percent + number_input * dig_multiplier)
+        }
+    ++ [No.]
+    -- -> night_choices
++   [Sleep (minimum: 3 hours)] Ending the night... # Passive
+    {
+    - remaining_night_hours < 3:
+        ~ health = max(0, health - 2 * (5 - remaining_night_hours))
+        Not having slept enough, you're less healthy for tomorrow. # Passive
+    - else:
+        ~ health = min(100, health + 2 * (remaining_night_hours - 2))
+        You recovered a bit of energy. # Passive
+    }
     -> day_phase
 
+// Red quests menu.
 === red_quests ===
 You approach Red standing in the courtyard. # Passive
 {
@@ -113,16 +152,17 @@ You approach Red standing in the courtyard. # Passive
     + [Try to acquire a rock hammer.]
     ~ started_daily_quest = true
     -> red_1_start
-- tools ?! poster && goal == "Break out of prison.":
+- !has_poster && goal == "Break out of prison.":
     + [Obtain a Rita Hayworth poster.]
     ~ started_daily_quest = true
     -> red_2_start
 - else:
-    Want a cig? Nothing better to do nowadays.
+    Red: Want a cig? Nothing better to do nowadays.
     + [Walk away.]
     -> day_phase.day_choices
 }
 
+// Ending knot - the story should divert here once the game is over for some reason.
 === END ===
 {
 - health == 0:

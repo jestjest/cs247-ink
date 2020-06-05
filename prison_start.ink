@@ -10,7 +10,7 @@ You are greeted by Head Warden Norton.
 Warden Norton: This is Mr. Hadley, captain of the guards. I am Mr. Norton, the warden. You are sinners and scum, that's why they have sent you to me.
 Rule number one: no blaspheming. I'll not have the Lord's name taken in vain in my prison.
 -*  [Continue.]
-Rule number two: at this prison, try to survive and keep your health in check. We don't want you dying in here and causing us trouble.
+Rule number two: at this prison, try to survive and keep your health in check. We don't want you dying in here and causing us trouble. You'll be alive with at most 100 and at least 1.
 ~ health = 100
 -*  [Continue.]
 Rule number three: don't be sneaking around. We know how suspicious everyone is.
