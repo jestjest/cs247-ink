@@ -1,5 +1,4 @@
 // TODO
-// Add suspicion score to digging.
 // Implement guards, environment interaction, other stories and tools.
 
 INCLUDE prologue.ink
