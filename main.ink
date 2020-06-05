@@ -33,7 +33,7 @@ VAR has_poster = false
 LIST tools = rock_hammer=1
 
 
--> prison_start
+-> prologue_start
 === prologue_end ===
 
 -> prison_start

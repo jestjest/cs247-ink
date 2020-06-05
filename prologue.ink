@@ -1,7 +1,7 @@
 // This is the prologue Ink story.
 
 // Prologue "knot" aka scene.
-=== prologue===
+=== prologue_start ===
 It's 1946, you walk into a courtroom for your trial, accused for murdering your wife.
 The jury listens like a gallery of mannequins on display, pale-faced and stupefied.
 You are on the witness stand, hands folded, suit and tie pressed, hair meticulously combed.
